@@ -1,0 +1,23 @@
+# agent
+agent_name: state_agent
+
+# env setting
+env:
+  env: Gym
+  game: Acrobot-v1
+  base_seed: 0
+  n_skip: 2
+  n_stack: 1
+  max_episode_steps: 1000
+  gray_scale: False
+  image_based: False
+  clip_reward: False
+  obs_shape: [10]
+
+# model architecture
+model:
+
+# wandb
+wandb:
+  project: 'ez-v2'
+  tag: 'State'

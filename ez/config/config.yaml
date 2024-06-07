@@ -1,0 +1,74 @@
+# Shared Config
+
+root_dir: .
+exp_config:
+tag: EZ-V2
+debug: False
+
+save_path: results/${env.env}/${env.game}/
+
+# ===========================================================================
+# specific(personal) setting in config/exp/xxx.yaml file
+# ===========================================================================
+
+agent_name:
+env:
+rl:
+optimizer:
+priority:
+train:
+data:
+mcts:
+model:
+actors:
+wandb:
+  project: 'ez-v2'
+  tag: ''
+
+# ===========================================================================
+# algorithm
+# ===========================================================================
+
+# ===========================================================================
+# training
+# ===========================================================================
+
+augmentation: ['shift', 'intensity']
+
+# ddp
+ddp:
+  world_size: 1
+  training_size: 1
+  address: '127.0.0.1'
+  #  port: '12355'
+
+ray:
+  single_process: False
+
+# log
+log:
+  log_interval: 100    # prev 1000
+  log_smos: False
+
+# ===========================================================================
+# evaluation
+# ===========================================================================
+
+# for eval.sh
+eval:
+  verbose: 0
+  save_path: test
+  model_path: 'results/Atari/Breakout/EZ-V2-seed=0-2023-08-10 00:40:53/models/model_10000.p'
+  model_path_new: 'results/Atari/Breakout/EZ-V2-seed=0-2023-08-10 00:40:53/models/model_80000.p'
+  n_episodes: 10  # 10 for training, 1 for eval.sh
+  compare_value: False
+  analysis_value: False
+
+# ===========================================================================
+# setting
+# ===========================================================================
+
+# hydra
+hydra:
+  run:
+    dir: .

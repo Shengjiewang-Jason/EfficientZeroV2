@@ -1,0 +1,169 @@
+# agent
+agent_name: dmc_state_agent
+
+# env setting
+env:
+  env: DMC
+  game: hopper_hop
+  base_seed: 0
+  n_skip: 2
+  n_stack: 1
+  max_episode_steps: 1000
+  gray_scale: False
+  image_based: False
+  clip_reward: False
+  obs_shape: 10
+  episodic: False
+
+rl:
+  discount: 0.997 # prev 0.99
+  unroll_steps: 5   # prev 5
+  td_steps: 5 # prev 5
+  auto_td_steps: 60000  # prev 30000 for 100k env steps
+  td_lambda: 0.95
+
+# optimizer
+optimizer:
+  type: Adam
+  lr: 3e-4
+  lr_warm_up: 0.01
+  lr_decay_type: none
+  lr_decay_rate: 0.1
+  lr_decay_steps: 300000
+  weight_decay: 2e-5
+  momentum: 0.9
+
+# priority of data
+priority:
+  use_priority: True
+  priority_prob_alpha: 1.0    # prev 0.6
+  priority_prob_beta: 1.0     # prev 0.4
+  min_prior: 0.000001
+
+# training
+train:
+  load_model_path: ''
+  batch_size: 256
+  training_steps: 100000        # 100 * 1000
+  offline_training_steps: 20000     # 20 * 1000
+  start_transitions: 2000       # 2 * 1000
+
+  eval_n_episode: 10          # prev 10
+  eval_interval: 5000
+
+  self_play_update_interval: 100   # prev 100
+  reanalyze_update_interval: 200   # prev 200
+  save_ckpt_interval: 10000
+
+  mini_batch_size: 256
+  reanalyze_ratio: 1.0
+
+  reward_loss_coeff: 1.0
+  value_loss_coeff: 0.5      # prev 0.25
+  policy_loss_coeff: 1.0
+  consistency_coeff: 2.0
+  decorrelation_coeff: 0.01
+  off_diag_coeff: 5e-3
+  entropy_coeff: 5e-2 # prev 5e-3
+
+  max_grad_norm: 5
+  change_temperature: True
+
+  periodic_reset: False
+  value_reanalyze: False
+  path_consistency: False
+  use_decorrelation: False
+  value_policy_detach: False
+  optimal_Q: False
+  v_num: 1
+  value_target: 'mixed'   # sarsa or search or mixed or max
+  use_IQL: False
+  IQL_weight: 0.5
+  start_use_mix_training_steps: 4e4   # prev 4e4
+  mixed_value_threshold: 2e4  # prev 2e4
+
+# self-play data collection
+data:
+  num_envs: 4
+  buffer_size: 100000        # 1 * 1000 * 1000
+  total_transitions: 100000  # 1M
+  top_transitions: 2e5
+  trajectory_size: 100        # prev 500
+  save_video: False
+  save_as_dataset: False
+
+# MCTS
+mcts:
+  language: cython
+  num_simulations: 32         # prev 8
+  num_top_actions: 16          # prev 4
+  num_sampled_actions: 16      # same as Sampled MuZero
+  c_visit: 50
+  c_scale: 0.1    # prev 0.1
+  value_minmax_delta: 0.01
+  mpc_horizon: 1
+  vis: ['print']
+  use_mppi: False
+  std_magnification: 3
+
+# model architecture
+model:
+  noisy_net: False
+  action_embedding: True
+  block_type: resnet          # resnet, convnext
+  down_sample: True
+  state_norm: False
+  value_prefix: False
+  value_target: bootstrapped  # bootstrapped or GAE
+  GAE_max_steps: 15           # 10 or 15 or 20
+  dynamic_type: None          # RNN or Transformer or None
+  init_zero: True
+  use_bn: True
+  use_p_norm: False
+  num_blocks: 2 # prev 3
+
+  hidden_shape: 128   # prev 128
+  rep_net_shape: 256
+  dyn_shape: 256
+  act_embed_shape: 64
+  rew_net_shape: [ 256, 256 ]
+  val_net_shape: [ 256, 256 ]
+  pi_net_shape: [ 256, 256 ]
+  proj_hid_shape: 512
+  pred_hid_shape: 512
+  proj_shape: 128
+  pred_shape: 128
+
+  fc_layers: [32]
+  lstm_hidden_size: 512
+  lstm_horizon_len: 5
+  value_ensumble: 1
+
+  policy_distribution: squashed_gaussian  # beta or squashed_gaussian or truncated_gaussian
+  policy_loss_type: reanalyze  # policy_gradient or reanalyze
+  policy_action_num: 4
+  random_action_num: 12
+  random_type: std   # std, normal, pink, OU
+
+  reward_support:
+    range: [ -2, 2 ]
+    scale: 0.01
+    env: DMC
+    bins: 51
+    type: support   # support or symlog
+  value_support:
+    range: [ -299, 299 ]
+    scale: 0.5
+    env: DMC
+    bins: 51
+    type: support   # support or symlog
+
+# worker process allocation
+actors:
+  data_worker: 1
+  batch_worker: 10
+
+# wandb
+wandb:
+  project: 'ez-v2-release'
+  tag: 'DMC-state'

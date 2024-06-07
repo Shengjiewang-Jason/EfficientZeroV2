@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*$py.class
+*.so
+*.o
+*.log
+
+
+# Pycharm
+.idea/*
+
+# results dir
+.hydra
+/results
+/files
+/test*
