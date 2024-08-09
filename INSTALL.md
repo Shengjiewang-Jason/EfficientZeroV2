@@ -52,3 +52,8 @@ cd -
    cd ez/mcts/ctree_v2
    sh make.sh
    ```
+1. In addition to compiling `ctree`, also compile `ori_ctree` :
+   ```bash
+   cd ez/mcts/ori_ctree
+   sh make.sh
+   ```
