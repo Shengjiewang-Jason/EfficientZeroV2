@@ -352,7 +352,7 @@ class PyMCTS(MCTS):
                 action = -1
                 select_action_lst = []
                 while node.is_expanded():
-                    action = self.select_action(node, value_min_max, gumble_noises, simulation_idx)
+                    action = self.select_action(node, value_min_max, gumble_noises[idx], simulation_idx)
                     node = node.children[action]
                     search_path.append(node)
                     select_action_lst.append(action)
@@ -491,7 +491,7 @@ class PyMCTS(MCTS):
                 action = -1
                 select_action_lst = []
                 while node.is_expanded():
-                    action = self.select_action(node, value_min_max, gumble_noises, simulation_idx)
+                    action = self.select_action(node, value_min_max, gumble_noises[idx], simulation_idx)
                     node = node.children[action]
                     search_path.append(node)
                     select_action_lst.append(action)
